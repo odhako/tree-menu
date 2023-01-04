@@ -1,9 +1,25 @@
 from django.contrib import admin
+from django.urls import reverse
+from django.utils.html import mark_safe
+
 from .models import Menu, Node
 
 
-class ChildrenInline(admin.StackedInline):
+class EditLinkToInlineObject:
+    def edit_link(self, object):
+        url = reverse(
+            f'admin:{object._meta.app_label}_{object._meta.model_name}_change',
+            args=[object.pk]
+        )
+        if object.pk:
+            return mark_safe(f'<a href="{url}">Edit sub-items</a>')
+        else:
+            return ''
+
+
+class ChildrenInline(EditLinkToInlineObject, admin.StackedInline):
     model = Node
+    readonly_fields = ('edit_link',)
 
 
 @admin.register(Menu)

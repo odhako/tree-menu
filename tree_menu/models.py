@@ -32,8 +32,9 @@ class Node(models.Model):
         unique=False,
     )
 
-    url = models.URLField(
+    url = models.CharField(
         verbose_name='URL',
+        max_length=200,
         null=False,
         unique=False,
     )
