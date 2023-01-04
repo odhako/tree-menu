@@ -13,6 +13,13 @@ class Menu(models.Model):
         unique=True,
     )
 
+    display_name = models.CharField(
+        verbose_name='Display name',
+        max_length=40,
+        null=False,
+        unique=False,
+    )
+
     def __str__(self):
         return self.name
 
