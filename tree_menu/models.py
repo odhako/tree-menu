@@ -1,6 +1,5 @@
+from django.core.exceptions import ValidationError
 from django.db import models
-from django.contrib.contenttypes.models import ContentType
-from django.contrib.contenttypes.fields import GenericForeignKey, GenericRelation
 
 # Create your models here.
 
@@ -33,10 +32,17 @@ class Node(models.Model):
     )
 
     url = models.CharField(
-        verbose_name='URL',
+        verbose_name='URL (used by default)',
         max_length=200,
-        null=False,
-        unique=False,
+        null=True,
+        blank=True,
+    )
+
+    named_url = models.CharField(
+        verbose_name='Named URL',
+        max_length=200,
+        null=True,
+        blank=True,
     )
 
     parent_node = models.ForeignKey(
@@ -57,3 +63,9 @@ class Node(models.Model):
 
     def __str__(self):
         return self.name
+
+    def clean(self):
+        if not self.url and not self.named_url:
+            raise ValidationError(
+                {'url': 'One of "URL" or "Named URL" should have a value.'}
+            )
