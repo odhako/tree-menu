@@ -6,7 +6,7 @@ from .models import Menu, Node
 
 
 class EditLinkToInlineObject:
-    def edit_link(self, object):
+    def sub_items(self, object):
         url = reverse(
             f'admin:{object._meta.app_label}_{object._meta.model_name}_change',
             args=[object.pk]
@@ -19,7 +19,7 @@ class EditLinkToInlineObject:
 
 class ChildrenInline(EditLinkToInlineObject, admin.StackedInline):
     model = Node
-    readonly_fields = ('edit_link',)
+    readonly_fields = ['sub_items', 'parent_menu', 'parent_node']
 
 
 @admin.register(Menu)
@@ -30,5 +30,6 @@ class MenuAdmin(admin.ModelAdmin):
 
 @admin.register(Node)
 class NodeAdmin(admin.ModelAdmin):
-    list_display = ['name', 'url', 'parent_node', 'parent_menu']
+    list_display = ['name', 'url']
+    readonly_fields = ['parent_menu', 'parent_node']
     inlines = [ChildrenInline]
