@@ -45,7 +45,7 @@ class Node(models.Model):
         blank=True,
     )
 
-    parent_node = models.ForeignKey(
+    parent = models.ForeignKey(
         'self',
         on_delete=models.CASCADE,
         related_name='children',
@@ -53,10 +53,10 @@ class Node(models.Model):
         blank=True,
     )
 
-    parent_menu = models.ForeignKey(
+    menu = models.ForeignKey(
         'Menu',
         on_delete=models.CASCADE,
-        related_name='children',
+        related_name='nodes',
         null=True,
         blank=True,
     )

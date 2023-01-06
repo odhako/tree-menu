@@ -1,40 +1,44 @@
 from django import template
-from django.urls import reverse
 from django.utils.html import mark_safe
-from tree_menu.models import Menu, Node
+
+from tree_menu.models import Menu
 
 
 register = template.Library()
 
 
-def make_item_html(child, current_path):
-    if child.url:
-        url = child.url
-    else:
-        url = reverse(child.named_url)
+def draw_node_children(node):
+    children = node.children.all()
+    if not children:
+        return ''
+    html = '<ul>'
+    for child in children:
+        html += '<li>'
+        html += f'<a href="{child.url}">{child.name}</a>'
 
-    if url == current_path:
-        output = f'<li><a href={url}><b>{child.name}</b></a></li>'
-    else:
-        output = f'<li><a href={url}>{child.name}</a></li>'
+        # Recursive walk
+        html += draw_node_children(child)
+        html += '</li>'
+    html += '</ul>'
+    return html
 
-    return output
 
+@register.simple_tag
+def draw_menu(menu_name):
 
-@register.simple_tag(takes_context=True)
-def draw_menu(context, name):
-    menu = Menu.objects.get(name=name)
-    output = [f'<h2>{menu.display_name}</h2><ul>']
+    menu = Menu.objects.get(name=menu_name)
+    root_nodes = menu.nodes.filter(parent=None)
 
-    for child in menu.children.all():
-        output.append(make_item_html(child, context.request.path))
-        if child.children.all():
-            output.append('<ul>')
-            for _ in child.children.all():
-                output.append(make_item_html(_, context.request.path))
-            output.append('</ul>')
-        output.append('</li>')
+    html = '<ul>'
 
-    output.append('</ul>')
-    output = "".join(output)
-    return mark_safe(output)
+    for root_node in root_nodes:
+        html += '<li>'
+        html += f'<a href="{root_node.url}">{root_node.name}</a>'
+
+        # Recursive walk
+        html += draw_node_children(root_node)
+
+        html += '</li>'
+
+    html += '</ul>'
+    return mark_safe(html)
