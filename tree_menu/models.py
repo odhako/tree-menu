@@ -45,7 +45,6 @@ class Node(models.Model):
         blank=True,
     )
 
-
     parent = models.ForeignKey(
         'self',
         on_delete=models.CASCADE,
