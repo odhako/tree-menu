@@ -4,7 +4,8 @@ from django.shortcuts import render
 
 
 def hello_world(request):
-    return render(request, 'index.html')
+    context = {'header': 'Hello, World!'}
+    return render(request, 'menu.html', context=context)
 
 
 def walk_menu(request, item=None):
