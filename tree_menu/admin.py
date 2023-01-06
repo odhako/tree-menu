@@ -30,7 +30,7 @@ class MenuAdmin(admin.ModelAdmin):
 
 @admin.register(Node)
 class NodeAdmin(admin.ModelAdmin):
-    list_display = ['name', 'url', 'named_url', 'menu', 'parent']
+    list_display = ['name', 'named_url', 'url', 'menu', 'parent']
     readonly_fields = [
         'menu',
         'parent',

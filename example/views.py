@@ -9,5 +9,5 @@ def hello_world(request):
 
 
 def walk_menu(request, item=None):
-    context = {'header': item}
+    context = {'header': f'path:item = {item}'}
     return render(request, 'menu.html', context=context)

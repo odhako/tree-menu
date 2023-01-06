@@ -31,19 +31,20 @@ class Node(models.Model):
         unique=False,
     )
 
-    url = models.CharField(
-        verbose_name='URL (used by default)',
+    named_url = models.CharField(
+        verbose_name='Named URL (used by default)',
         max_length=200,
         null=True,
         blank=True,
     )
 
-    named_url = models.CharField(
-        verbose_name='Named URL',
+    url = models.CharField(
+        verbose_name='URL',
         max_length=200,
         null=True,
         blank=True,
     )
+
 
     parent = models.ForeignKey(
         'self',
