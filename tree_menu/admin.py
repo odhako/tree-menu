@@ -36,6 +36,7 @@ class MenuAdmin(admin.ModelAdmin):
 @admin.register(Node)
 class NodeAdmin(admin.ModelAdmin):
     list_display = ['name', 'named_url', 'url', 'menu', 'parent']
+    list_editable = ['named_url', 'url']
     readonly_fields = [
         'menu',
         'parent',
