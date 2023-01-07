@@ -2,7 +2,7 @@ from django import template
 from django.urls import reverse
 from django.utils.html import mark_safe
 
-from tree_menu.models import Menu
+from tree_menu.models import Menu, Node
 
 
 register = template.Library()
@@ -25,29 +25,24 @@ def make_node(node, current_url):
         name = f'<b>{node.name}</b>'
 
     html = f'<a href="{url}">{name}</a>'
-    html += draw_node_children(node, current_url)
-    return f'<li>{html}</li>'
 
-
-def draw_node_children(node, current_url):
+    # Draw children
     children = node.children.all()
-    if not children:
-        return ''
-    html = '<ul>'
-    for child in children:
-        html += make_node(child, current_url)
-    html += '</ul>'
-    return html
+    if children:
+        html += '<ul>'
+        for child in children:
+            html += make_node(child, current_url)
+        html += '</ul>'
+
+    return f'<li>{html}</li>'
 
 
 @register.simple_tag(takes_context=True)
 def draw_menu(context, menu_name):
-    menu = Menu.objects.get(name=menu_name)
-    root_nodes = menu.nodes.filter(parent=None)
+    root_node = Menu.objects.get(name=menu_name).root_node
     current_url = context.request.path
 
     html = '<ul>'
-    for root_node in root_nodes:
-        html += make_node(root_node, current_url)
+    html += make_node(root_node, current_url)
     html += '</ul>'
     return mark_safe(html)
