@@ -19,8 +19,29 @@ class Menu(models.Model):
         unique=False,
     )
 
+    root_node = models.ForeignKey(
+        'Node',
+        on_delete=models.CASCADE,
+        related_name='is_root_node',
+        null=True,
+        blank=True,
+    )
+
     def __str__(self):
         return self.name
+
+    def save(self, force_insert=False, **kwargs):
+        if not self.root_node:
+            root_node = Node()
+            root_node.name = 'root'
+            root_node.url = '/'
+            if not self.pk:  # If creating new menu
+                super(Menu, self).save(force_insert, **kwargs)
+                force_insert = False
+            root_node.menu = self
+            root_node.save()  # Save, so that it gets a pk
+            self.root_node = root_node
+        super(Menu, self).save(force_insert, **kwargs)
 
 
 class Node(models.Model):

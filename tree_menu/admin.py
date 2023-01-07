@@ -19,13 +19,18 @@ class EditLinkToInlineObject:
 
 class ChildrenInline(EditLinkToInlineObject, admin.StackedInline):
     model = Node
-    readonly_fields = ['sub_items', 'menu', 'parent']
+    readonly_fields = [
+        'sub_items',
+        'menu',
+        'parent',
+    ]
 
 
 @admin.register(Menu)
 class MenuAdmin(admin.ModelAdmin):
-    list_display = ['name']
-    inlines = [ChildrenInline]
+    list_display = ['name', 'root_node']
+    readonly_fields = ['root_node']
+    # inlines = [ChildrenInline]
 
 
 @admin.register(Node)
