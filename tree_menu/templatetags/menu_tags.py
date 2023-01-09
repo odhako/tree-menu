@@ -42,14 +42,14 @@ def draw_node(node, active=False):
 @register.simple_tag(takes_context=True)
 def draw_menu(context, menu_name):
     current_url = context.request.path
-    print('Current path: ', current_url)
+    # print('Current path: ', current_url)
 
     # Get url_name
     try:
         current_url_name = resolve(current_url).url_name
     except Resolver404:
         current_url_name = None
-    print('Current named url: ', current_url_name)
+    # print('Current named url: ', current_url_name)
 
     # Draw menu
     # html = '<ul>'
@@ -64,13 +64,13 @@ def draw_menu(context, menu_name):
         active_node = Node.objects.filter(
             menu=Menu.objects.get(name=menu_name).id
         ).get(url=current_url)
-    print('Active node: ', active_node)
+    # print('Active node: ', active_node)
 
     # Get active node parents
     i = 1  # number of </ul> in th end
     if active_node.parent:
         ancestors = get_ancestors(active_node.parent)
-        print('Ancestors: ', ancestors)
+        # print('Ancestors: ', ancestors)
 
         # Draw ancestors
         i = len(ancestors) + 2
@@ -85,7 +85,7 @@ def draw_menu(context, menu_name):
 
     # Get active node children
     children = get_children(active_node)
-    print('Children: ', children)
+    # print('Children: ', children)
 
     # Draw children
     for node in children:

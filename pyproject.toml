@@ -1,14 +1,12 @@
 [tool.poetry]
-name = "django-02"
+name = "tree-menu"
 version = "0.1.0"
-description = ""
+description = "Tree menu Django-app"
 authors = ["odhako <odhako@gmail.com>"]
 
 [tool.poetry.dependencies]
 python = "^3.10"
 Django = "^4.1.5"
-django-extensions = "^3.2.1"
-ipython = "^8.7.0"
 
 [tool.poetry.dev-dependencies]
 

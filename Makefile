@@ -9,3 +9,6 @@ migrations:
 
 migrate:
 	poetry run python manage.py migrate
+
+req:
+	poetry export --without-hashes -f requirements.txt -o requirements.txt
